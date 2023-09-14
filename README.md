@@ -12,6 +12,8 @@ I've used a powerful tech stack and testing tools:
 
 - **React:** The core library for building user interfaces.
 - **React Native with Expo:** Accelerates native mobile app development.
+- **NativeWind:** Streamlines styling with utility-first CSS for React Native
+  components.
 - **React Hook Form:** Simplifies form handling and validation.
 - **Zod:** For client-side data validation and request handling.
 - **Zustand:** Minimalistic state management for React.
