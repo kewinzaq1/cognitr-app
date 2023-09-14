@@ -1,35 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import {Text, View} from '@/components/Themed'
+import {Button} from '@/components/Button'
+import {useArticlesStore, useAuthStore} from '@/stores'
 
 export default function ModalScreen() {
+  const logout = useAuthStore(c => c.logout)
+  const user = useAuthStore(c => c.user)
+  const resetArticle = useArticlesStore(s => s.reset)
+
+  const handleLogout = async () => {
+    logout()
+    resetArticle()
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/modal.tsx" />
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+    <View className="p-4">
+      <Text className="text-lg py-4">
+        Your are logged as
+        <Text className="font-semibold text-blue-600">
+          {` ${user?.username}`}{' '}
+          <Text className="text-white text-xs">({user?.email})</Text>
+        </Text>
+      </Text>
+      <Button title="Logout" onPress={handleLogout} />
     </View>
-  );
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
