@@ -66,7 +66,7 @@ Before you begin, ensure that you have the following prerequisites installed:
 
 ### Running the App
 
-4. Start the development server using Expo CLI:
+4. Start the development server using Yarn:
 
    ```bash
    yarn start
@@ -74,7 +74,7 @@ Before you begin, ensure that you have the following prerequisites installed:
 
 ### Running the Tests
 
-1. Start the development server using Expo CLI:
+1. Start the development server using Yarn:
 
    ```bash
    yarn test
