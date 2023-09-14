@@ -8,7 +8,7 @@ export const loginSchema = z.object({
     .max(20, 'Username can contain max. 20 characters')
     .regex(
       LOGIN_REGEX.ALPHANUMERIC,
-      'Username should contains only alphanumeric characters',
+      'Username should contain only alphanumeric characters',
     ),
   password: z
     .string()

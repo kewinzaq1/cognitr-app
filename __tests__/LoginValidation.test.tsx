@@ -146,7 +146,7 @@ describe('LoginValidation', () => {
       await userEvent.press(button)
     })
     expect(
-      screen.getByText('Username should contains only alphanumeric characters'),
+      screen.getByText('Username should contain only alphanumeric characters'),
     ).toBeVisible()
 
     await act(async () => {
@@ -169,7 +169,7 @@ describe('LoginValidation', () => {
     ).toBeNull()
     expect(
       screen.queryByText(
-        'Username should contains only alphanumeric characters',
+        'Username should contain only alphanumeric characters',
       ),
     ).toBeNull()
   })
