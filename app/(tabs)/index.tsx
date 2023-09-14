@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {FlatList} from 'react-native'
+import {ActivityIndicator, FlatList} from 'react-native'
 import {View, Text} from '@/components/Themed'
 import {useArticlesStore} from '@/stores/articles.store'
 import {
@@ -18,6 +18,7 @@ export default function TabOneScreen() {
   const getArticles = useArticlesStore(s => s.getArticles)
   const getNextPage = useArticlesStore(s => s.getNextPage)
   const isRefreshing = useArticlesStore(s => s.isRefreshing)
+  const isLoading = useArticlesStore(s => s.isLoading)
 
   const displayingArticles = React.useMemo(() => {
     return articles?.map(item => item.data).flat()
@@ -45,6 +46,7 @@ export default function TabOneScreen() {
           onRefresh={refresh}
           refreshing={isRefreshing}
           onEndReached={getNextPage}
+          onEndReachedThreshold={0.2}
           className="w-full h-full"
           data={displayingArticles}
           keyExtractor={item => item.id.toString()}
@@ -63,6 +65,7 @@ export default function TabOneScreen() {
           )}
         />
       )}
+      {isLoading && <ActivityIndicator />}
     </View>
   )
 }

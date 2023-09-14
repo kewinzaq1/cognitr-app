@@ -3,4 +3,5 @@ export const ARTICLES_INIT_STATE = {
   error: null,
   isRefreshing: false,
   currentPage: 1,
+  isLoading: false,
 }

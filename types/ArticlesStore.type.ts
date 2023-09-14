@@ -8,6 +8,7 @@ type FetchArticlesResult = Promise<
 export type ArticlesStore = {
   articles: Articles[] | null
   error: unknown | null
+  isLoading: boolean
   isRefreshing: boolean
   currentPage: number
   refresh: () => Promise<void>

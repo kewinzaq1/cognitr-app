@@ -18,6 +18,7 @@ export const useArticlesStore = create<ArticlesStore>((set, get) => ({
     set({isRefreshing: true})
 
     const result = await fetchArticles({jwt, page: 1})
+
     if (result.error || !result.data) {
       set({error: result.error})
       Alert.alert('Cannot fetch articles!', result.error.message)
@@ -35,14 +36,16 @@ export const useArticlesStore = create<ArticlesStore>((set, get) => ({
     set({isRefreshing: false})
   },
   async getArticles() {
-    set({error: null})
+    set({error: null, isLoading: true})
     const jwt = useAuthStore.getState().jwt
 
     if (!jwt) {
+      set({isLoading: false})
       return
     }
 
     const result = await fetchArticles({jwt, page: get().currentPage})
+
     if (result.error) {
       set({error: result.error})
       Alert.alert('Cannot fetch articles!', result.error.message)
@@ -57,7 +60,7 @@ export const useArticlesStore = create<ArticlesStore>((set, get) => ({
       ? [...currentArticles, result.data]
       : [result.data]
 
-    set({articles: updatedArticles})
+    set({articles: updatedArticles, isLoading: false})
 
     return result
   },
