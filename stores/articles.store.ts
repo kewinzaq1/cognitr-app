@@ -74,7 +74,8 @@ export const useArticlesStore = create<ArticlesStore>((set, get) => ({
     }
 
     set({currentPage: currentPage + 1})
-    return this.getArticles()
+
+    return get().getArticles()
   },
   reset() {
     set({...ARTICLES_INIT_STATE})
