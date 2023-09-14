@@ -1,31 +1,57 @@
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
+import * as React from 'react'
+import {FlatList} from 'react-native'
+import {View, Text} from '@/components/Themed'
+import {useArticlesStore} from '@/stores/articles.store'
+import {
+  ArticleCard,
+  ArticleCardHeader,
+  ArticleCardTitle,
+  ArticleCardDates,
+} from '@/components/articles'
 
 export default function TabOneScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
-  );
-}
+  const articles = useArticlesStore(s => s.articles)
+  const refresh = useArticlesStore(s => s.refresh)
+  const getArticles = useArticlesStore(s => s.getArticles)
+  const getNextPage = useArticlesStore(s => s.getNextPage)
+  const isRefreshing = useArticlesStore(s => s.isRefreshing)
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+  const displayingArticles = React.useMemo(() => {
+    return articles?.map(item => item.data).flat()
+  }, [articles])
+
+  React.useEffect(() => {
+    if (articles) {
+      return
+    }
+    getArticles()
+  }, [articles, getArticles])
+
+  return (
+    <View className="flex-col p-4 flex-1 h-screen w-full">
+      {displayingArticles && (
+        <FlatList
+          onRefresh={refresh}
+          refreshing={isRefreshing}
+          onEndReached={getNextPage}
+          className="w-full h-full"
+          data={displayingArticles}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({
+            item: {
+              attributes: {title, createdAt, description, updatedAt},
+            },
+          }) => (
+            <ArticleCard>
+              <ArticleCardHeader>
+                <ArticleCardTitle>{title}</ArticleCardTitle>
+                <ArticleCardDates createdAt={createdAt} updatedAt={updatedAt} />
+              </ArticleCardHeader>
+              <Text>{description}</Text>
+            </ArticleCard>
+          )}
+        />
+      )}
+    </View>
+  )
+}

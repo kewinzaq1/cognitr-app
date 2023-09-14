@@ -1,1 +1,6 @@
 export * from './AuthStore.type'
+export * from './Articles.type'
+export * from './LoginResult.type'
+export * from './User.type'
+export * from './LoginParams.type'
+export * from './StrapiError.type'
