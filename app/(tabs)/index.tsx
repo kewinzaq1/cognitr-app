@@ -8,6 +8,9 @@ import {
   ArticleCardTitle,
   ArticleCardDates,
 } from '@/components/articles'
+import {useAuthStore} from '@/stores'
+import {router} from 'expo-router'
+import {AUTH_INIT_STATE} from '@/constants'
 
 export default function TabOneScreen() {
   const articles = useArticlesStore(s => s.articles)
@@ -24,7 +27,15 @@ export default function TabOneScreen() {
     if (articles) {
       return
     }
-    getArticles()
+    getArticles().then(result => {
+      if (!result?.error) {
+        return
+      }
+      if ('status' in result.error) {
+        useAuthStore.setState({...AUTH_INIT_STATE})
+        router.push('/(tabs)/')
+      }
+    })
   }, [articles, getArticles])
 
   return (

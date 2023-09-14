@@ -1,10 +1,6 @@
-import {Alert} from 'react-native'
 import {env} from './envs'
 import {StrapiErrorSchema} from './StrapiError.schema'
 import {ZodRawShape, z} from 'zod'
-import {router} from 'expo-router'
-import {useAuthStore} from '@/stores'
-import {AUTH_INIT_STATE} from '@/constants'
 
 type SafeFetchOptions<T extends ZodRawShape> = {
   schema: z.ZodObject<T>
@@ -24,19 +20,16 @@ export async function safeFetch<T extends ZodRawShape>(
     const parsed = StrapiErrorSchema.safeParse(result)
     if (!parsed.success) {
       return {
-        error: 'Received unknown error! Please try again!', // or parsed.error.message, but i just think that current option is more user friendly
+        error: {
+          ...parsed.error,
+          message: 'Received unknown error! Please try again!',
+        }, // or parsed.error.message, but i just think that current option is more user friendly
         data: null,
       }
     }
 
-    if (parsed.data.error.status === 401) {
-      Alert.alert(parsed.data.error.message)
-      useAuthStore.setState({...AUTH_INIT_STATE})
-      router.push('/(tabs)/')
-    }
-
     return {
-      error: parsed.data.error.message,
+      error: parsed.data.error,
       data: null,
     }
   }
@@ -46,7 +39,10 @@ export async function safeFetch<T extends ZodRawShape>(
   const parsed = options.schema.safeParse(data)
   if (!parsed.success) {
     return {
-      error: 'Received unknown data! Please try again!', // or parsed.error.message, but i just think that current option is more user friendly
+      error: {
+        ...parsed.error,
+        message: 'Received unknown data! Please try again!',
+      }, // or parsed.error.message, but i just think that current option is more user friendly
       data: null,
     }
   }

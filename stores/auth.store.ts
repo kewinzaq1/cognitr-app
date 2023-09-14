@@ -19,8 +19,8 @@ export const useAuthStore = create(
         set({isLoading: false})
 
         if (error) {
-          set({error})
-          Alert.alert('Authentication error', error)
+          set({error: error.message})
+          Alert.alert('Authentication error', error.message)
           return
         }
 

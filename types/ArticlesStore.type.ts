@@ -1,4 +1,9 @@
+import {fetchArticles} from '@/utils'
 import {Articles} from './Articles.type'
+
+type FetchArticlesResult = Promise<
+  Awaited<ReturnType<typeof fetchArticles>> | undefined
+>
 
 export type ArticlesStore = {
   articles: Articles[] | null
@@ -6,7 +11,7 @@ export type ArticlesStore = {
   isRefreshing: boolean
   currentPage: number
   refresh: () => Promise<void>
-  getArticles: () => Promise<void>
-  getNextPage: () => Promise<void>
+  getArticles: () => FetchArticlesResult
+  getNextPage: () => FetchArticlesResult
   reset: () => void
 }

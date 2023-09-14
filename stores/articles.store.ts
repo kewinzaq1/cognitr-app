@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import {ArticlesStore} from '@/types/ArticlesStore'
+import {ArticlesStore} from '@/types'
 import {fetchArticles} from '@/utils/articles/fetchArticles'
 import {useAuthStore} from './auth.store'
 import Toast from 'react-native-root-toast'
@@ -20,7 +20,7 @@ export const useArticlesStore = create<ArticlesStore>((set, get) => ({
     const result = await fetchArticles({jwt, page: 1})
     if (result.error || !result.data) {
       set({error: result.error})
-      Alert.alert('Cannot fetch articles!', result.error)
+      Alert.alert('Cannot fetch articles!', result.error.message)
       set({isRefreshing: false})
       return
     }
@@ -45,11 +45,11 @@ export const useArticlesStore = create<ArticlesStore>((set, get) => ({
     const result = await fetchArticles({jwt, page: get().currentPage})
     if (result.error) {
       set({error: result.error})
-      Alert.alert('Cannot fetch articles!', result.error)
-      return
+      Alert.alert('Cannot fetch articles!', result.error.message)
+      return result
     }
     if (!result.data) {
-      return
+      return result
     }
 
     const currentArticles = get().articles
@@ -58,6 +58,8 @@ export const useArticlesStore = create<ArticlesStore>((set, get) => ({
       : [result.data]
 
     set({articles: updatedArticles})
+
+    return result
   },
   async getNextPage() {
     const {currentPage, articles} = get()
