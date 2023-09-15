@@ -32,7 +32,7 @@ export default function TabOneScreen() {
       if (!result?.error) {
         return
       }
-      if ('status' in result.error) {
+      if ('status' in result.error && result.error.status === 401) {
         useAuthStore.setState({...AUTH_INIT_STATE})
         router.push('/(tabs)/')
       }
